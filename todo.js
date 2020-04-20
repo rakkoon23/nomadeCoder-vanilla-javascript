@@ -4,8 +4,21 @@ const toDoForm = document.querySelector(".js-toDoForm"),
 
 const TODOS_LS = "toDos";
 
-const toDos = [];
+let toDos = [];
 
+function deleteToDo(event){
+    // console.dir(event.target) // 이 방법으로 event.target의 부모 노드를 확인할 수 있음.
+    // event.target.parentNode // event.target.parentNode는 여러 개의 버튼 중 어느 버튼이 클릭됐는지 알려준다. 정확히는, 클릭된 버튼 태드의 부모 태그를 불러온다.
+    const btn = event.target; // 클릭된 버튼을 할당.
+    const li = btn.parentNode; // 그리고 그 부모 태그(li)를 할당.
+    toDoList.removeChild(li); // 해당 태그를 지움.
+    // filter 함수는 array의 모든 요소들에 함수를 실행하고, 값이 true인 것들만 가지고 새로운 array를 만들어 반환함.
+    const cleanToDos = toDos.filter(function(toDo){
+        return toDo.id !== parseInt(li.id);
+    });
+    toDos = cleanToDos;
+    saveToDos();
+}
 
 // to-do-list를 local storage에 저장하는 함수
 function saveToDos(){
@@ -18,6 +31,7 @@ function paintToDo(text){
     const span = document.createElement("span"); // span 태그를 만들어서 변수에 할당
     const newId = toDos.length + 1 
     delBtn.innerText = "X"; // 버튼의 텍스트는 "X"로 설정
+    delBtn.addEventListener("click", deleteToDo);
     span.innerText = text; // 사용자가 입력한 텍스트가 span태그의 텍스트가 되도록 설정
     li.appendChild(delBtn); // li 태그의 자식 태그로 버튼을 삽입
     li.appendChild(span); // li 태그의 자식 태그로 span 태그 삽입
